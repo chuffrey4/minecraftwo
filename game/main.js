@@ -126,12 +126,13 @@ Player.prototype.render = function () {
 
 function World() {
     this.chunks = [];
-    this.chunks[0] = this.generateChunk();
+    this.chunks[0] = this.generateChunk(0);
+    this.chunks[-1] = this.generateChunk(-1);
 }
 
 World.prototype.generateWorld = function () {
     var chunkLocation = this.getPlayerChunkLocation();
-    if (this.chunks[chunkLocation]==null) this.chunks[chunkLocation] = generateChunk(chunkLocation);
+    if (this.chunks[chunkLocation]==undefined||this.chunks[chunkLocation]==null) this.chunks[chunkLocation] = generateChunk(chunkLocation);
 }
 
 World.prototype.getPlayerChunkLocation = function () {
@@ -180,11 +181,12 @@ World.prototype.render = function () {
 
 World.prototype.renderChunk = function (chunk) {
     var blocks = chunk.blocks;
+    var xOffset = chunk.location*chunkWidth;
     for (var x=0;x<chunkWidth;x++) {
         for (var y=0;y<chunkHeight;y++) {
             if (blocks[y*chunkWidth+x]!=0) {
                 fill(127,0,127);
-                image(assets.blocks[blocks[y*chunkWidth+x]],x*tileWidth+camera.xOffset,((-y-1)*tileWidth)+camera.yOffset,tileWidth,tileWidth);
+                image(assets.blocks[blocks[y*chunkWidth+x]],(x+xOffset)*tileWidth+camera.xOffset,((-y-1)*tileWidth)+camera.yOffset,tileWidth,tileWidth);
             }
         }
     }
