@@ -93,7 +93,7 @@ function Camera() {
 
 Camera.prototype.update = function () {
     this.xOffset = round(-(player.location.x*tileWidth-(gameCanvasWidth/2-player.width*tileWidth/2)));
-    this.yOffset = round(-(player.location.y*tileWidth-(gameCanvasHeight/2-player.height*tileWidth/2)));
+    this.yOffset = round(-(-player.location.y*tileWidth-(gameCanvasHeight/2-player.height*tileWidth/2)));
 }
 
 
@@ -111,28 +111,27 @@ Player.prototype.update = function (delta) {
     if (keyIsDown(68)||keyIsDown(39)) {
         this.location.add(4*delta,0);
     }    
-    if (keyIsDown(87)||keyIsDown(38)) {
+    if (keyIsDown(83)||keyIsDown(40)) {
         this.location.add(0,-4*delta);
     }
-    if (keyIsDown(83)||keyIsDown(40)) {
+    if (keyIsDown(87)||keyIsDown(38)) {
         this.location.add(0,4*delta);
     }
 }
 
 Player.prototype.render = function () {
     fill(0,255,0);
-    rect((player.location.x*tileWidth)+camera.xOffset,(player.location.y*tileWidth)+camera.yOffset,tileWidth*player.width,tileWidth*player.height);
+    rect((player.location.x*tileWidth)+camera.xOffset,(-player.location.y*tileWidth)+camera.yOffset,tileWidth*player.width,tileWidth*player.height);
 }
 
 function World() {
     this.chunks = [];
-    this.chunks[0] = this.generateChunk(0);
-    this.chunks[-1] = this.generateChunk(-1);
+    this.generateWorld();
 }
 
 World.prototype.generateWorld = function () {
     var chunkLocation = this.getPlayerChunkLocation();
-    if (this.chunks[chunkLocation]==undefined||this.chunks[chunkLocation]==null) this.chunks[chunkLocation] = generateChunk(chunkLocation);
+    if (this.chunks[chunkLocation]==undefined||this.chunks[chunkLocation]==null) this.chunks[chunkLocation] = this.generateChunk(chunkLocation);
 }
 
 World.prototype.getPlayerChunkLocation = function () {
@@ -177,6 +176,10 @@ World.prototype.update = function (delta) {
 
 World.prototype.render = function () {
     this.renderChunk(this.chunks[this.getPlayerChunkLocation()]);
+}
+
+World.prototype.renderBlocks = function () {
+    
 }
 
 World.prototype.renderChunk = function (chunk) {
